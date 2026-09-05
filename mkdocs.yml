@@ -1,0 +1,56 @@
+site_name: Introducción a la Mecatrónica
+site_description: Curso de Introducción a la Mecatrónica — IBERO Puebla
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.critic:
+      mode: view
+  - pymdownx.caret
+  - pymdownx.keys
+  - def_list
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: red
+  features:
+    - content.code.copy
+    - content.tooltips
+    - navigation.sections
+extra_css:
+  - https://use.fontawesome.com/releases/v6.5.2/css/all.css
+  - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+nav:
+  - Inicio: index.md
+  - "Sobre Mí": SobreMi.md
+  - "Prácticas":
+      - "Practica 1": Practicas/Practica1.md
+  - "Proyectos":
+      - "Proyecto 1": Proyectos/Proyecto1.md
+  - "Reflexiones":
+      - "Vision Mecatronica": Reflexiones/VisionMecatronica.md
