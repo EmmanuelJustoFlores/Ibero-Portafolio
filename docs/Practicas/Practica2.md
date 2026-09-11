@@ -1,13 +1,13 @@
-# Práctica 1: 555 en Astable (LED Parpadeante)
+# Práctica 2: ESP32: Salida, Entrada & Antirrebote
 
 **Asignatura:** Introducción a la Mecatrónica  
-**Autor:** Emmanuel Justo Flores -208048, Romina Velarde Mata -207345    
-**Fecha:** 05/09/2026  
+**Autor:** Emmanuel Justo Flores -208048, Romina Velarde Mata -207345  
+**Fecha:** 11/09/2026  
 
 ---
 
 ## 1. Objetivo
-Construir un oscilador astable utilizando el temporizador NE555 para hacer parpadear un LED, calcular la frecuencia y el ciclo de trabajo (*duty cycle*) teóricos, medirlos experimentalmente y analizar las diferencias.
+Implementar y analizar el control de entradas y salidas digitales en el microcontrolador ESP32 DevKit V1. Se busca configurar una salida digital para conmutar un LED a $1\text{ Hz}$, hacer uso de la resistencia interna `INPUT_PULLUP` para la lectura de botones, implementar un algoritmo de conmutación de estado (*toggle*) con técnica de antirrebote (*debounce*) por software sin retardos bloqueantes (`delay()`), y comparar el comportamiento de un contador de pulsaciones con y sin filtrado de rebotes.
 
 ---
 
@@ -15,90 +15,163 @@ Construir un oscilador astable utilizando el temporizador NE555 para hacer parpa
 
 | Cantidad | Componente / Herramienta | Especificación / Valor |
 | :---: | :--- | :--- |
-| 1× | Circuito Integrado | NE555 (DIP-8) |
+| 1× | Microcontrolador | ESP32 DevKit V1 (WROOM-32) |
+| 1× | Cable de comunicación | USB a Micro-USB / USB-C (Datos) |
 | 1× | Diodo Emisor de Luz | LED (Rojo / Estándar) |
-| 1× | Resistor de limitación para LED | $330\,\Omega$ o $470\,\Omega$ |
-| 1× | Resistor temporizador $R_A$ | $1\text{ k}\Omega$ |
-| 1× | Resistor temporizador $R_B$ | $10\text{ k}\Omega$ |
-| 1× | Capacitor de temporización $C$ | $100\,\mu\text{F}$ (Electrolítico) / $100\text{ nF}$ (Cerámico) |
-| 1× | Capacitor de desacoplo | $10\text{ nF}$ (para pin 5 CTRL) |
-| 1× | Fuente de alimentación | Fuente regulada de 5 V DC / Protoboard / Cables |
+| 1× | Resistor de limitación | $220\,\Omega$ o $330\,\Omega$ |
+| 1× | Pulsador | Push button (4 pines) |
+| 1× | Resistor opcional | $10\text{ k}\Omega$ (Pull-up / Pull-down externo) |
+| 1× | Elementos de ensamble | Protoboard y Cables Jumper |
 
 ---
 
-## 3. Diseño y Fórmulas Teóricas
+## 3. Códigos Implementados con Comentarios
 
-El capacitor $C$ se carga a través de $R_A + R_B$ y se descarga únicamente a través de $R_B$:
+### 3.1. Práctica Blink:
 
-* **Tiempo en ALTO ($t_{ALTO}$):**  
-  $$t_{ALTO} = 0.693 \cdot (R_A + R_B) \cdot C$$
+```cpp
+// Definición de la constante 'LED' asignada al pin GPIO 23 del ESP32 donde está cableado el circuito
+#define LED 23
 
-* **Tiempo en BAJO ($t_{BAJO}$):**  
-  $$t_{BAJO} = 0.693 \cdot R_B \cdot C$$
+// Función setup(): se ejecuta una sola vez al encender o reiniciar el microcontrolador
+void setup() {
+  pinMode(LED, OUTPUT); // Configura el pin GPIO 23 como salida digital de voltaje (HIGH/LOW)
+}
 
-* **Frecuencia teórica ($f$):**  
-  $$f = \frac{1.44}{(R_A + 2R_B) \cdot C} = \frac{1.44}{(1000 + 20000) \cdot 100 \times 10^{-6}} \approx 0.69\text{ Hz}$$
+// Función loop(): se ejecuta en un ciclo infinito de manera continua
+void loop() {
+  digitalWrite(LED, HIGH); // Envía un nivel lógico ALTO (3.3 V) al GPIO 23 para encender el LED
+  delay(1000);             // Detiene la ejecución durante 1000 ms (1 segundo) manteniendo el LED encendido
+  digitalWrite(LED, LOW);  // Envía un nivel lógico BAJO (0 V / Tierra) al GPIO 23 para apagar el LED
+  delay(1000);             // Detiene la ejecución durante 1000 ms (1 segundo) manteniendo el LED apagado
+}
+```
+### 3.2. Práctica Blink con boton:
+```cpp
+// Define el pin GPIO 23 del ESP32 donde se encuentra conectado el LED
+#define LED 23
+// Define el pin GPIO 33 del ESP32 donde se encuentra conectado el pulsador
+#define BUTTON 33
 
-* **Ciclo de trabajo teóricamente calculado ($Duty$):**  
-  $$Duty = \frac{R_A + R_B}{R_A + 2R_B} \times 100 = \frac{11000}{21000} \times 100 \approx 52.4\%$$
+// Función de configuración inicial que se ejecuta una sola vez al encender el microcontrolador
+void setup() {
+  pinMode(LED, OUTPUT);          // Configura el GPIO 23 como salida digital de voltaje (HIGH/LOW)
+  pinMode(BUTTON, INPUT_PULLUP); // Configura el GPIO 33 como entrada digital activando la resistencia Pull-Up interna (3.3 V en reposo)
+}
+
+// Función del bucle principal que se ejecuta continuamente en ciclo infinito
+void loop() {
+  // Comprueba si la lectura digital del botón es BAJA (LOW), lo que significa que el botón fue presionado cerrando el circuito a GND
+  if (digitalRead(BUTTON) == LOW) {
+    digitalWrite(LED, HIGH);     // Envía nivel lógico ALTO (3.3 V) al GPIO 23 para encender el LED mientras el botón permanezca presionado
+  } else {                       // Si el botón no está presionado (la resistencia Pull-Up mantiene el pin en HIGH)
+    digitalWrite(LED, LOW);      // Envía nivel lógico BAJO (0 V / GND) al GPIO 23 para mantener el LED apagado
+  }
+}
+```
+### 3.3. Práctica Toggle con antirrebote:
+```cpp
+// Define el pin GPIO 23 del ESP32 asignado al LED
+#define LED 23
+// Define el pin GPIO 33 del ESP32 asignado al pulsador
+#define BUTTON 33
+
+// Variable booleana para registrar el estado lógico del LED (false = apagado, true = encendido)
+bool estadoLed = false;
+// Almacena la lectura del botón en el ciclo anterior (inicializada en HIGH por la resistencia Pull-Up)
+int lecturaAnterior = HIGH;
+// Guarda la marca de tiempo (milisegundos) del último cambio de estado del botón
+unsigned long ultimoCambio = 0;
+// Tiempo del filtro antirrebote por software definido en milisegundos (30 ms)
+const unsigned long DEBOUNCE_MS = 30;
+
+// Función de configuración inicial que se ejecuta una sola vez al encender el microcontrolador
+void setup() {
+  pinMode(LED, OUTPUT);          // Configura el pin GPIO 23 como salida digital
+  pinMode(BUTTON, INPUT_PULLUP); // Configura el pin GPIO 33 como entrada con resistencia Pull-Up interna
+  Serial.begin(115200);          // Inicializa la comunicación serial a 115200 baudios para enviar datos a la consola
+}
+
+// Bucle principal que se ejecuta indefinidamente
+void loop() {
+  // Lee el nivel de voltaje actual en el pin del botón (HIGH o LOW)
+  int lectura = digitalRead(BUTTON);
+
+  // Comprueba si hubo un cambio de estado y si transcurrió el tiempo de filtrado antirrebote (30 ms)
+  if (lectura != lecturaAnterior && millis() - ultimoCambio > DEBOUNCE_MS) {
+    ultimoCambio = millis(); // Actualiza el registro de tiempo con el instante del último cambio detectado
+    
+    // Evalúa si el botón fue efectivamente presionado (nivel BAJO / masa)
+    if (lectura == LOW) {
+      estadoLed = !estadoLed;                            // Conmuta el estado lógico del LED (TOGGLE)
+      digitalWrite(LED, estadoLed);                      // Envía la señal al GPIO 23 para encender o apagar el LED
+      Serial.print("boton presionado:");                 // Imprime en el Monitor Serie la etiqueta de confirmación
+      Serial.println(estadoLed ? "encendido" : "apagado"); // Imprime el texto "encendido" o "apagado" según el estado actual
+    }
+  }
+
+  // Actualiza la variable con la lectura del estado actual para la siguiente iteración
+  lecturaAnterior = lectura;
+}
+```
+
+## 4. Esquematicos
+### 4.1. Esquemático Blink:
+<img width="480" height="270" alt="giphy" src="https://github.com/user-attachments/assets/45f4f970-2570-43cd-86d8-dea6168a8ee3" />
+
+Circuito de salida digital básico.
+
+* **Alimentación:** El ESP32 recibe energía y comunicación desde la computadora a través del cable USB.
+* **Línea de Tierra (`GND`):** El cable blanco va desde un pin **GND** del ESP32 hacia el riel negativo (azul) de la protoboard para fijar la masa común.
+* **Señal de Salida Digital:** El cable negro transporta la señal lógica de $3.3\text{ V}$ desde el pin **GPIO 23** del ESP32 directamente hacia el ánodo (terminal positiva) del LED.
+* **Limitación de Corriente:** Una resistencia de $220\,\Omega$ (Rojo-Rojo-Marrón) se conecta en serie entre el cátodo (terminal negativa) del LED y la línea de masa (`GND`) para proteger el diodo contra sobrecorriente.
+
+### 4.1. Esquemático Blink con boton:
+
+<img width="931" height="474" alt="dedc5704-7632-4450-a758-91016bfd3632" src="https://github.com/user-attachments/assets/7da21e11-92ba-4858-bb75-39af9bd16669" />
+
+### Circuito de Entrada Digital (Pulsador / Botón).
+
+Circuito de entrada digital básico para la lectura de un pulsador mecánico mediante un microcontrolador ESP32.
+
+* **Alimentación y Tierra (`GND`):** El cable blanco conecta el pin **GND** del ESP32 a la masa común en la protoboard.
+* **Señal de Entrada Digital:** El cable morado conecta una de las terminales del pulsador al pin **GPIO 33** del ESP32 para registrar el cambio de estado.
+* **Referencia de Masa:** El cable gris deriva la terminal del pulsador a la línea de tierra (`GND`) para cerrar el circuito al presionar.
+* **Estabilización de Voltaje:** Resistencia de $10\text{ k}\Omega$ (Marrón-Negro-Naranja) configurada para fijar el nivel de voltaje de referencia y evitar falsos disparos por ruido eléctrico.
+
+### 4.1. Esquemático Toggle con antirrebote:
+
+<img width="931" height="474" alt="dedc5704-7632-4450-a758-91016bfd3632" src="https://github.com/user-attachments/assets/a2faa229-0ffb-4140-8111-60f110dbb1ac" />
+
+### Circuito de Entrada y Salida Digital con Antirrebote.
+
+Circuito de control digital que combina una entrada por pulsador (GPIO 33) y una salida por LED (GPIO 23) utilizando un microcontrolador ESP32.
+
+* **Alimentación y Tierra (`GND`):** El cable blanco conecta el pin **GND** del ESP32 al riel negativo (azul) de la protoboard para fijar la masa común.
+* **Etapa de Salida Digital (LED):** El cable negro conecta el pin **GPIO 23** del ESP32 al ánodo del LED, cuya corriente es limitada en serie por una resistencia de $220\,\Omega$ (Rojo-Rojo-Marrón) conectada a `GND`.
+* **Etapa de Entrada Digital (Pulsador):** Los cables morado y gris conectan las terminales del pulsador mecánico al pin **GPIO 33** del ESP32 y a la referencia de masa (`GND`).
+* **Estabilización de Voltaje:** Se incluye una resistencia de $10\text{ k}\Omega$ (Marrón-Negro-Naranja) en la etapa de entrada para evitar lecturas erráticas o estado flotante al presionar el botón.
+  
+### 4.3. Videos de Funcionamiento
+
 
 ---
 
-## 4. Entregables
+### 4.4. Explicación Teórica
 
-### 4.1. Esquemático Anotado
-![Demostración circuito 555](https://media1.tenor.com/m/ZLt09yCH5cQAAAAC/5555-led-working.gif)
+#### a. ¿Qué es el rebote de un botón?
+Cuando presionas o sueltas un botón, las piezas de metal en su interior chocan y rebotan un par de veces antes de quedarse quietas. 
+Como el ESP32 es un procesador extremadamente rápido, detecta todos esos pequeños brincos en milisegundos y piensa que presionaste el botón muchas veces seguidas en lugar de una sola.
 
-El diagrama muestra la configuración del temporizador NE555 operando en modo astable (oscilador libre). La función de cada nodo del circuito se detalla a continuación:
-
-* **Alimentación y Control de Reset (Pines 8 y 4):** Se conectan a la línea positiva de alimentación ($V_{CC} = 5\text{ V}$).
-* **Referencia de Tierra (Pin 1):** Conectado a la masa común ($GND$).
-* **Red de carga y oscilación ($R_A$, $R_B$, $C$):**
-  * La corriente inicial fluye desde $V_{CC}$ hacia el capacitor $C$ atravesando las resistencias $R_A$ y $R_B$ en serie.
-  * El **Pin 7 (Descarga)** se conecta al punto medio entre $R_A$ y $R_B$. Durante la fase de descarga, el transistor interno del 555 conmuta a tierra y vacía la energía del capacitor $C$ únicamente a través de $R_B$.
-  * Los pines **Pin 2 (Disparo)** y **Pin 6 (Umbral)** están unidos al polo positivo del capacitor $C$. Esta conexión permite al integrado sensar la tensión en el capacitor y alternar la salida del voltaje.
-* **Estabilización de Referencia (Pin 5):** Se conecta a $GND$ mediante un capacitor cerámico de $10\text{ nF}$ para filtrar variaciones de tensión en el divisor resistivo interno del integrado.
-* **Etapa de Salida (Pin 3):** Entrega la señal de onda cuadrada resultante, conectada en serie a la resistencia limitadora de $330\,\Omega$ y al LED indicador.
-### 4.2. Montaje en Protoboard
-[Foto del circuito en protoboard]
-
-
-<img width="1599" height="1200" alt="a104b64c-33ca-4d31-bb6c-eac111d8b00b" src="https://github.com/user-attachments/assets/d5eb2563-eb73-4b36-82d5-5d27e02771e6" />
-
-
-### 4.3. Mediciones y Comparación (Teoría vs. Práctica)
-
-El porcentaje de error se calcula mediante la fórmula:
-
-$$\% \text{ error} = \frac{|\text{Valor Teórico} - \text{Valor Medido}|}{\text{Valor Teórico}} \times 100$$
-
-| Magnitud | Teórico (Calculado) | Medido (Experimental) | % de Error | Instrumento Utilizado |
-| :--- | :---: | :---: | :---: | :--- |
-| **$V_{CC}$ (V)** | 5.0 V | 4.99 V | 0.20% | Multímetro (V en paralelo) |
-| **$V_{salida}$ en ALTO (V)** | $\approx V_{CC} - 1.5\text{ V}$ (3.5 V) | 3.2 V | 8.57% | Multímetro / Osciloscopio |
-| **Frecuencia (Hz)** | 0.69 Hz | 358.9 mHz | 47.98% | Osciloscopio / DMM con Hz |
-| **Duty (%)** | 52.4 % | 52.78 % | 0.73% | Osciloscopio (Measure) |
-| **$I_{LED}$ (mA)** | 4.55 mA | 3.64 mA | 20.0% | Multímetro (A en serie) |
-
-### 4.4. Demostración en Video
-[Demostración del circuito]
-
-
-https://github.com/user-attachments/assets/ddad14eb-2296-4cb1-b93c-edd6ea065297
+#### b. ¿Por qué con `INPUT_PULLUP` la lógica queda invertida?
+Al activar `INPUT_PULLUP`, el ESP32 mantiene el pin alimentado con energía todo el tiempo. Por eso, cuando el botón **no está presionado**, la tarjeta detecta un nivel **ALTO (`HIGH` / `1`)**.
+Cuando **presionas el botón**, la corriente se va a tierra (`GND`) y el voltaje cae a cero, así que la tarjeta detecta un nivel **BAJO (`LOW` / `0`)**.
+En resumen: el botón funciona "al revés" (suelto es `1` y presionado es `0`).
 
 ---
 
-## 5. Bitácora de Errores y Explicación
+## 5. Conclusiones
 
-### ¿Por qué no dio exacto el valor medido respecto al teórico?
-El desfase entre el valor teórico ($0.69\text{ Hz}$) y el medido se debe principalmente a las tolerancias físicas de los componentes:
-* **Resistencias ($R_A, R_B$):** Presentan una tolerancia típica de $\pm 5\%$.
-* **Capacitor Electrolítico ($C$):** Es el componente que **domina el error**, ya que los capacitores electrolíticos tienen variaciones de capacitancia reales que oscilan entre $-20\%$ y $+80\%$ respecto a su valor nominal impreso.
-
-### Registro de fallas durante el ensamble
-1. **¿Qué falló?:** luz led mal colocada.
-2. **¿Cómo se encontró?:** pensábamos en un error en el acomodado de los jumpers así que probamos diferentes versiones y fue cuando invertimos los polos del led que descubrimos el error.
-3. **¿Cómo se resolvió?:** poniendo el polo negativo del led al jumper que lo conecta a la salida del temporizador 555
-
-
-.
+### 5.2. Conclusiones
+* **Filtro por código (*antirrebote*):** Comprobamos que es necesario usar un filtro en el código para limpiar los brinquitos del botón y evitar que la tarjeta lea pulsaciones falsas.
+* **Uso de `millis()`:** Usar `millis()` en lugar de `delay()` evita que el programa se congele esperando, lo que permite que el ESP32 siga haciendo otras tareas al mismo tiempo.
