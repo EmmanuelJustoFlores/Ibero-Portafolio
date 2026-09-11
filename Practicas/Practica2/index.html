@@ -1,0 +1,1046 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Curso de Introducción a la Mecatrónica — IBERO Puebla">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Práctica 2: ESP32: Salida, Entrada & Antirrebote - Introducción a la Mecatrónica</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#practica-2-esp32-salida-entrada-antirrebote" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Introducción a la Mecatrónica" class="md-header__button md-logo" aria-label="Introducción a la Mecatrónica" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introducción a la Mecatrónica
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Práctica 2: ESP32: Salida, Entrada &amp; Antirrebote
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Introducción a la Mecatrónica" class="md-nav__button md-logo" aria-label="Introducción a la Mecatrónica" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introducción a la Mecatrónica
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SobreMi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sobre Mí
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prácticas
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Prácticas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Practica1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Practica 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proyectos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Proyectos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Proyectos/Proyecto1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proyecto 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reflexiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reflexiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Reflexiones/VisionMecatronica/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vision Mecatronica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-materiales-y-herramientas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Materiales y Herramientas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-codigos-implementados-con-comentarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Códigos Implementados con Comentarios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Códigos Implementados con Comentarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-practica-blink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Práctica Blink:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-practica-blink-con-boton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Práctica Blink con boton:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-practica-toggle-con-antirrebote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Práctica Toggle con antirrebote:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-esquematicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Esquematicos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Esquematicos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-esquematico-blink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Esquemático Blink:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41-esquematico-blink-con-boton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Esquemático Blink con boton:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circuito-de-entrada-digital-pulsador-boton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuito de Entrada Digital (Pulsador / Botón).
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#41-esquematico-toggle-con-antirrebote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Esquemático Toggle con antirrebote:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circuito-de-entrada-y-salida-digital-con-antirrebote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuito de Entrada y Salida Digital con Antirrebote.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-videos-de-funcionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Videos de Funcionamiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-explicacion-teorica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Explicación Teórica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4. Explicación Teórica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-que-es-el-rebote-de-un-boton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        a. ¿Qué es el rebote de un botón?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-por-que-con-input_pullup-la-logica-queda-invertida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        b. ¿Por qué con INPUT_PULLUP la lógica queda invertida?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-conclusiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Conclusiones
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Conclusiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#52-conclusiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Conclusiones
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="practica-2-esp32-salida-entrada-antirrebote">Práctica 2: ESP32: Salida, Entrada &amp; Antirrebote</h1>
+<p><strong>Asignatura:</strong> Introducción a la Mecatrónica<br />
+<strong>Autor:</strong> Emmanuel Justo Flores -208048, Romina Velarde Mata -207345<br />
+<strong>Fecha:</strong> 11/09/2026  </p>
+<hr />
+<h2 id="1-objetivo">1. Objetivo</h2>
+<p>Implementar y analizar el control de entradas y salidas digitales en el microcontrolador ESP32 DevKit V1. Se busca configurar una salida digital para conmutar un LED a <span class="arithmatex">\(1\text{ Hz}\)</span>, hacer uso de la resistencia interna <code>INPUT_PULLUP</code> para la lectura de botones, implementar un algoritmo de conmutación de estado (<em>toggle</em>) con técnica de antirrebote (<em>debounce</em>) por software sin retardos bloqueantes (<code>delay()</code>), y comparar el comportamiento de un contador de pulsaciones con y sin filtrado de rebotes.</p>
+<hr />
+<h2 id="2-materiales-y-herramientas">2. Materiales y Herramientas</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Cantidad</th>
+<th style="text-align: left;">Componente / Herramienta</th>
+<th style="text-align: left;">Especificación / Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1×</td>
+<td style="text-align: left;">Microcontrolador</td>
+<td style="text-align: left;">ESP32 DevKit V1 (WROOM-32)</td>
+</tr>
+<tr>
+<td style="text-align: center;">1×</td>
+<td style="text-align: left;">Cable de comunicación</td>
+<td style="text-align: left;">USB a Micro-USB / USB-C (Datos)</td>
+</tr>
+<tr>
+<td style="text-align: center;">1×</td>
+<td style="text-align: left;">Diodo Emisor de Luz</td>
+<td style="text-align: left;">LED (Rojo / Estándar)</td>
+</tr>
+<tr>
+<td style="text-align: center;">1×</td>
+<td style="text-align: left;">Resistor de limitación</td>
+<td style="text-align: left;"><span class="arithmatex">\(220\,\Omega\)</span> o <span class="arithmatex">\(330\,\Omega\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">1×</td>
+<td style="text-align: left;">Pulsador</td>
+<td style="text-align: left;">Push button (4 pines)</td>
+</tr>
+<tr>
+<td style="text-align: center;">1×</td>
+<td style="text-align: left;">Resistor opcional</td>
+<td style="text-align: left;"><span class="arithmatex">\(10\text{ k}\Omega\)</span> (Pull-up / Pull-down externo)</td>
+</tr>
+<tr>
+<td style="text-align: center;">1×</td>
+<td style="text-align: left;">Elementos de ensamble</td>
+<td style="text-align: left;">Protoboard y Cables Jumper</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-codigos-implementados-con-comentarios">3. Códigos Implementados con Comentarios</h2>
+<h3 id="31-practica-blink">3.1. Práctica Blink:</h3>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Definición de la constante 'LED' asignada al pin GPIO 23 del ESP32 donde está cableado el circuito</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#define LED 23</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">// Función setup(): se ejecuta una sola vez al encender o reiniciar el microcontrolador</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span><span class="w"> </span><span class="c1">// Configura el pin GPIO 23 como salida digital de voltaje (HIGH/LOW)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1">// Función loop(): se ejecuta en un ciclo infinito de manera continua</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span><span class="w"> </span><span class="c1">// Envía un nivel lógico ALTO (3.3 V) al GPIO 23 para encender el LED</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w">             </span><span class="c1">// Detiene la ejecución durante 1000 ms (1 segundo) manteniendo el LED encendido</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span><span class="w">  </span><span class="c1">// Envía un nivel lógico BAJO (0 V / Tierra) al GPIO 23 para apagar el LED</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w">             </span><span class="c1">// Detiene la ejecución durante 1000 ms (1 segundo) manteniendo el LED apagado</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="32-practica-blink-con-boton">3.2. Práctica Blink con boton:</h3>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Define el pin GPIO 23 del ESP32 donde se encuentra conectado el LED</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="cp">#define LED 23</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">// Define el pin GPIO 33 del ESP32 donde se encuentra conectado el pulsador</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="cp">#define BUTTON 33</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1">// Función de configuración inicial que se ejecuta una sola vez al encender el microcontrolador</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span><span class="w">          </span><span class="c1">// Configura el GPIO 23 como salida digital de voltaje (HIGH/LOW)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">BUTTON</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span><span class="w"> </span><span class="c1">// Configura el GPIO 33 como entrada digital activando la resistencia Pull-Up interna (3.3 V en reposo)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1">// Función del bucle principal que se ejecuta continuamente en ciclo infinito</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="c1">// Comprueba si la lectura digital del botón es BAJA (LOW), lo que significa que el botón fue presionado cerrando el circuito a GND</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">BUTTON</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span><span class="w">     </span><span class="c1">// Envía nivel lógico ALTO (3.3 V) al GPIO 23 para encender el LED mientras el botón permanezca presionado</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">                       </span><span class="c1">// Si el botón no está presionado (la resistencia Pull-Up mantiene el pin en HIGH)</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span><span class="w">      </span><span class="c1">// Envía nivel lógico BAJO (0 V / GND) al GPIO 23 para mantener el LED apagado</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="33-practica-toggle-con-antirrebote">3.3. Práctica Toggle con antirrebote:</h3>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Define el pin GPIO 23 del ESP32 asignado al LED</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cp">#define LED 23</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">// Define el pin GPIO 33 del ESP32 asignado al pulsador</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="cp">#define BUTTON 33</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// Variable booleana para registrar el estado lógico del LED (false = apagado, true = encendido)</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="kt">bool</span><span class="w"> </span><span class="n">estadoLed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1">// Almacena la lectura del botón en el ciclo anterior (inicializada en HIGH por la resistencia Pull-Up)</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="kt">int</span><span class="w"> </span><span class="n">lecturaAnterior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HIGH</span><span class="p">;</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1">// Guarda la marca de tiempo (milisegundos) del último cambio de estado del botón</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">ultimoCambio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1">// Tiempo del filtro antirrebote por software definido en milisegundos (30 ms)</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">DEBOUNCE_MS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1">// Función de configuración inicial que se ejecuta una sola vez al encender el microcontrolador</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span><span class="w">          </span><span class="c1">// Configura el pin GPIO 23 como salida digital</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">BUTTON</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span><span class="w"> </span><span class="c1">// Configura el pin GPIO 33 como entrada con resistencia Pull-Up interna</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span><span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span><span class="w">          </span><span class="c1">// Inicializa la comunicación serial a 115200 baudios para enviar datos a la consola</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="p">}</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="c1">// Bucle principal que se ejecuta indefinidamente</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">  </span><span class="c1">// Lee el nivel de voltaje actual en el pin del botón (HIGH o LOW)</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">lectura</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">BUTTON</span><span class="p">);</span>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">  </span><span class="c1">// Comprueba si hubo un cambio de estado y si transcurrió el tiempo de filtrado antirrebote (30 ms)</span>
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">lectura</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">lecturaAnterior</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ultimoCambio</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">DEBOUNCE_MS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">    </span><span class="n">ultimoCambio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span><span class="w"> </span><span class="c1">// Actualiza el registro de tiempo con el instante del último cambio detectado</span>
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">    </span><span class="c1">// Evalúa si el botón fue efectivamente presionado (nivel BAJO / masa)</span>
+</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">lectura</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">      </span><span class="n">estadoLed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">estadoLed</span><span class="p">;</span><span class="w">                            </span><span class="c1">// Conmuta el estado lógico del LED (TOGGLE)</span>
+</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">      </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED</span><span class="p">,</span><span class="w"> </span><span class="n">estadoLed</span><span class="p">);</span><span class="w">                      </span><span class="c1">// Envía la señal al GPIO 23 para encender o apagar el LED</span>
+</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">      </span><span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"boton presionado:"</span><span class="p">);</span><span class="w">                 </span><span class="c1">// Imprime en el Monitor Serie la etiqueta de confirmación</span>
+</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">      </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">estadoLed</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"encendido"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"apagado"</span><span class="p">);</span><span class="w"> </span><span class="c1">// Imprime el texto "encendido" o "apagado" según el estado actual</span>
+</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>
+</span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="w">  </span><span class="c1">// Actualiza la variable con la lectura del estado actual para la siguiente iteración</span>
+</span><span id="__span-2-41"><a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="w">  </span><span class="n">lecturaAnterior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lectura</span><span class="p">;</span>
+</span><span id="__span-2-42"><a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="4-esquematicos">4. Esquematicos</h2>
+<h3 id="41-esquematico-blink">4.1. Esquemático Blink:</h3>
+<p><img width="480" height="270" alt="giphy" src="https://github.com/user-attachments/assets/45f4f970-2570-43cd-86d8-dea6168a8ee3" /></p>
+<p>Circuito de salida digital básico.</p>
+<ul>
+<li><strong>Alimentación:</strong> El ESP32 recibe energía y comunicación desde la computadora a través del cable USB.</li>
+<li><strong>Línea de Tierra (<code>GND</code>):</strong> El cable blanco va desde un pin <strong>GND</strong> del ESP32 hacia el riel negativo (azul) de la protoboard para fijar la masa común.</li>
+<li><strong>Señal de Salida Digital:</strong> El cable negro transporta la señal lógica de <span class="arithmatex">\(3.3\text{ V}\)</span> desde el pin <strong>GPIO 23</strong> del ESP32 directamente hacia el ánodo (terminal positiva) del LED.</li>
+<li><strong>Limitación de Corriente:</strong> Una resistencia de <span class="arithmatex">\(220\,\Omega\)</span> (Rojo-Rojo-Marrón) se conecta en serie entre el cátodo (terminal negativa) del LED y la línea de masa (<code>GND</code>) para proteger el diodo contra sobrecorriente.</li>
+</ul>
+<h3 id="41-esquematico-blink-con-boton">4.1. Esquemático Blink con boton:</h3>
+<p><img width="931" height="474" alt="dedc5704-7632-4450-a758-91016bfd3632" src="https://github.com/user-attachments/assets/7da21e11-92ba-4858-bb75-39af9bd16669" /></p>
+<h3 id="circuito-de-entrada-digital-pulsador-boton">Circuito de Entrada Digital (Pulsador / Botón).</h3>
+<p>Circuito de entrada digital básico para la lectura de un pulsador mecánico mediante un microcontrolador ESP32.</p>
+<ul>
+<li><strong>Alimentación y Tierra (<code>GND</code>):</strong> El cable blanco conecta el pin <strong>GND</strong> del ESP32 a la masa común en la protoboard.</li>
+<li><strong>Señal de Entrada Digital:</strong> El cable morado conecta una de las terminales del pulsador al pin <strong>GPIO 33</strong> del ESP32 para registrar el cambio de estado.</li>
+<li><strong>Referencia de Masa:</strong> El cable gris deriva la terminal del pulsador a la línea de tierra (<code>GND</code>) para cerrar el circuito al presionar.</li>
+<li><strong>Estabilización de Voltaje:</strong> Resistencia de <span class="arithmatex">\(10\text{ k}\Omega\)</span> (Marrón-Negro-Naranja) configurada para fijar el nivel de voltaje de referencia y evitar falsos disparos por ruido eléctrico.</li>
+</ul>
+<h3 id="41-esquematico-toggle-con-antirrebote">4.1. Esquemático Toggle con antirrebote:</h3>
+<p><img width="931" height="474" alt="dedc5704-7632-4450-a758-91016bfd3632" src="https://github.com/user-attachments/assets/a2faa229-0ffb-4140-8111-60f110dbb1ac" /></p>
+<h3 id="circuito-de-entrada-y-salida-digital-con-antirrebote">Circuito de Entrada y Salida Digital con Antirrebote.</h3>
+<p>Circuito de control digital que combina una entrada por pulsador (GPIO 33) y una salida por LED (GPIO 23) utilizando un microcontrolador ESP32.</p>
+<ul>
+<li><strong>Alimentación y Tierra (<code>GND</code>):</strong> El cable blanco conecta el pin <strong>GND</strong> del ESP32 al riel negativo (azul) de la protoboard para fijar la masa común.</li>
+<li><strong>Etapa de Salida Digital (LED):</strong> El cable negro conecta el pin <strong>GPIO 23</strong> del ESP32 al ánodo del LED, cuya corriente es limitada en serie por una resistencia de <span class="arithmatex">\(220\,\Omega\)</span> (Rojo-Rojo-Marrón) conectada a <code>GND</code>.</li>
+<li><strong>Etapa de Entrada Digital (Pulsador):</strong> Los cables morado y gris conectan las terminales del pulsador mecánico al pin <strong>GPIO 33</strong> del ESP32 y a la referencia de masa (<code>GND</code>).</li>
+<li><strong>Estabilización de Voltaje:</strong> Se incluye una resistencia de <span class="arithmatex">\(10\text{ k}\Omega\)</span> (Marrón-Negro-Naranja) en la etapa de entrada para evitar lecturas erráticas o estado flotante al presionar el botón.</li>
+</ul>
+<h3 id="43-videos-de-funcionamiento">4.3. Videos de Funcionamiento</h3>
+<p>https://github.com/user-attachments/assets/0de9aeb1-d5ff-4cfd-ab79-5b950de74a7e</p>
+<p>https://github.com/user-attachments/assets/d41355eb-6ac8-4a3b-9520-77a86f3190ca</p>
+<p>https://github.com/user-attachments/assets/882d7cd6-23f9-4a39-a691-d0f5e1822e2f</p>
+<hr />
+<h3 id="44-explicacion-teorica">4.4. Explicación Teórica</h3>
+<h4 id="a-que-es-el-rebote-de-un-boton">a. ¿Qué es el rebote de un botón?</h4>
+<p>Cuando presionas o sueltas un botón, las piezas de metal en su interior chocan y rebotan un par de veces antes de quedarse quietas. 
+Como el ESP32 es un procesador extremadamente rápido, detecta todos esos pequeños brincos en milisegundos y piensa que presionaste el botón muchas veces seguidas en lugar de una sola.</p>
+<h4 id="b-por-que-con-input_pullup-la-logica-queda-invertida">b. ¿Por qué con <code>INPUT_PULLUP</code> la lógica queda invertida?</h4>
+<p>Al activar <code>INPUT_PULLUP</code>, el ESP32 mantiene el pin alimentado con energía todo el tiempo. Por eso, cuando el botón <strong>no está presionado</strong>, la tarjeta detecta un nivel <strong>ALTO (<code>HIGH</code> / <code>1</code>)</strong>.
+Cuando <strong>presionas el botón</strong>, la corriente se va a tierra (<code>GND</code>) y el voltaje cae a cero, así que la tarjeta detecta un nivel <strong>BAJO (<code>LOW</code> / <code>0</code>)</strong>.
+En resumen: el botón funciona "al revés" (suelto es <code>1</code> y presionado es <code>0</code>).</p>
+<hr />
+<h2 id="5-conclusiones">5. Conclusiones</h2>
+<h3 id="52-conclusiones">5.2. Conclusiones</h3>
+<ul>
+<li><strong>Filtro por código (<em>antirrebote</em>):</strong> Comprobamos que es necesario usar un filtro en el código para limpiar los brinquitos del botón y evitar que la tarjeta lea pulsaciones falsas.</li>
+<li><strong>Uso de <code>millis()</code>:</strong> Usar <code>millis()</code> en lugar de <code>delay()</code> evita que el programa se congele esperando, lo que permite que el ESP32 siga haciendo otras tareas al mismo tiempo.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.tooltips", "navigation.sections"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
