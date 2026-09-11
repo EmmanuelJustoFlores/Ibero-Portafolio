@@ -156,6 +156,8 @@ Circuito de control digital que combina una entrada por pulsador (GPIO 33) y una
 
 https://github.com/user-attachments/assets/0de9aeb1-d5ff-4cfd-ab79-5b950de74a7e
 
+https://github.com/user-attachments/assets/d41355eb-6ac8-4a3b-9520-77a86f3190ca
+
 ---
 
 ### 4.4. Explicación Teórica
