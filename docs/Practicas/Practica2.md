@@ -158,6 +158,8 @@ https://github.com/user-attachments/assets/0de9aeb1-d5ff-4cfd-ab79-5b950de74a7e
 
 https://github.com/user-attachments/assets/d41355eb-6ac8-4a3b-9520-77a86f3190ca
 
+https://github.com/user-attachments/assets/882d7cd6-23f9-4a39-a691-d0f5e1822e2f
+
 ---
 
 ### 4.4. Explicación Teórica
