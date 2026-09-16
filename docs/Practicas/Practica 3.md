@@ -1,5 +1,8 @@
-# Práctica: Motor DC, Puente H, Servo y ADC
+# Práctica 3: Motor DC, Puente H, Servo y ADC
 
+**Asignatura:** Introducción a la Mecatrónica  
+**Autor:** Emmanuel Justo Flores -208048, Romina Velarde Mata -207345  
+**Fecha:** 15/09/2026  
 ## 1. Descripción del Proyecto
 Documentación y código fuente para la práctica de control de actuadores (Motor DC y Servomotor) y lecturas analógicas (ADC) mediante microcontrolador y el driver de puente H.
 
