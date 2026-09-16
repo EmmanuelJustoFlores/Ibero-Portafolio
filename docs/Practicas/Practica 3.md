@@ -3,7 +3,7 @@
 **Asignatura:** Introducción a la Mecatrónica  
 **Autor:** Emmanuel Justo Flores -208048, Romina Velarde Mata -207345  
 **Fecha:** 15/09/2026  
-## 1. Descripción del Proyecto
+## 1. Objetivo
 Documentación y código fuente para la práctica de control de actuadores (Motor DC y Servomotor SG90) y lectura de entradas analógicas utilizando la plataforma **Arduino Uno** y un driver de **Puente H**.
 
 ## 2. Materiales
