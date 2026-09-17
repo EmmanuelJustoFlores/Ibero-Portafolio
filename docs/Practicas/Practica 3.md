@@ -127,11 +127,13 @@ A continuación se presentan los enlaces a los videos demostrativos del funciona
 
 * **Video 1: Control de Motor DC con Puente H**
   * **Descripción:** Explicación por voz del cambio de sentido de giro del motor DC mediante las entradas de control (`in1` a `in4`) y la alimentación compartida.
-  * **Enlace al video:** [Ver demostración en video](URL_DEL_VIDEO_AQUI)
+ <img width="480" height="270" alt="giphy" src="https://github.com/user-attachments/assets/c01bf952-fa4a-4b5b-8443-e2a4d8c7f1e7" />
+
 
 * **Video 2: Posicionamiento del Servomotor SG90**
   * **Descripción:** Demostración comentada del movimiento angular del servo a $0^\circ$, $90^\circ$ y $180^\circ$ mediante señales PWM.
-  * **Enlace al video:** [Ver demostración en video](URL_DEL_VIDEO_AQUI)
+ <img width="480" height="270" alt="giphy" src="https://github.com/user-attachments/assets/929324e8-8063-44aa-a4ad-40022f2e4824" />
+
 
 
     
