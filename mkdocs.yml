@@ -1,48 +1,55 @@
-site_name: Introducción a la Mecatrónica
-site_description: Curso de Introducción a la Mecatrónica — IBERO Puebla
+site_name: Portafolio de Mecatrónica
+site_description: Documentación de prácticas y proyectos
+site_author: Emmanuel Justo Flores
+
+theme:
+  name: material
+  language: es
+  
+  # Paleta de colores y alternador de modo oscuro / claro
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+
+  # Funcionalidades estéticas y de navegación
+  features:
+    - navigation.tabs          # Pestañas principales en el menú superior
+    - navigation.sections      # Organización por secciones en la barra lateral
+    - navigation.top           # Botón flotante para regresar arriba
+    - navigation.path          # Muestra la ruta de navegación actual (breadcrumbs)
+    - search.suggest           # Sugerencias automáticas en la barra de búsqueda
+    - search.highlight         # Resalta palabras encontradas en la búsqueda
+    - content.code.copy        # Agrega botón para copiar los bloques de código
+
+# Extensiones para mejorar el formato de los documentos Markdown
 markdown_extensions:
+  - admonition                 # Bloques visuales de notas, avisos y alertas
+  - pymdownx.details           # Cajas desplegables u ocultables
+  - pymdownx.superfences       # Formato mejorado para bloques de código
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.critic:
-      mode: view
-  - pymdownx.caret
-  - pymdownx.keys
-  - def_list
-  - attr_list
-  - md_in_html
-  - pymdownx.blocks.caption
-  - admonition
-  - pymdownx.details
-  - pymdownx.emoji
-  - pymdownx.tabbed:
+  - pymdownx.tabbed:           # Pestañas de contenido o código interactivo
       alternate_style: true
-  - pymdownx.tasklist:
-      custom_checkbox: true
-      clickable_checkbox: true
-theme:
-  name: material
-  palette:
-    - scheme: default
-      primary: red
-  features:
-    - content.code.copy
-    - content.tooltips
-    - navigation.sections
-extra_css:
-  - https://use.fontawesome.com/releases/v6.5.2/css/all.css
-  - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css
-extra_javascript:
+  - tables                     # Tablas formateadas
+  - attr_list
+
+plugins:
+  - search
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 nav:
