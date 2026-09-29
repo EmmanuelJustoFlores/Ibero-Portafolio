@@ -1,15 +1,15 @@
 # **Portafolio: Ingeniería Mecatrónica**
 
-**Equipo**:
+**Equipo:**
 
- - Nombre integrante 1
- - Nombre integrante 2
+- Emmanuel Justo Flores (Matrícula: 208048)
+- Romina Velarde Mata (Matrícula: 207345)
 
-**Contacto**: 
+**Contacto:**
 
-- Correo integrante 1
-- Correo integrante 2
+- 208048@iberopuebla.mx
+- 207345@iberopuebla.mx
 
-**Carrera**: Ingeniría Mecatrónica
+**Carrera:** Ingeniería Mecatrónica
 
-**Semestre**: Otoño 2026
+**Semestre:** Otoño 2026
