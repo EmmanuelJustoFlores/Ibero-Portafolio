@@ -25,24 +25,27 @@ theme:
 
   # Funcionalidades estéticas y menú de navegación
   features:
-    - navigation.tabs          # Pestañas en la barra superior
+    - navigation.tabs          # Pestañas principales en la barra superior
     - navigation.sections      # Organización en la barra lateral
-    - navigation.top           # Botón para volver arriba
+    - navigation.top           # Botón flotante para regresar arriba
     - navigation.path          # Ruta de navegación (breadcrumbs)
-    - search.suggest           # Búsqueda interactiva
+    - search.suggest           # Búsqueda interactiva con sugerencias
     - search.highlight
-    - content.code.copy        # Botón para copiar código
+    - content.code.copy        # Botón para copiar bloques de código
 
-# Estratificación del menú vinculada a las carpetas dentro de docs/
+# Menú de navegación actualizado (nombres de archivos sin espacios)
 nav:
   - Inicio: index.md
   - Sobre Mí: SobreMi.md
   - Prácticas:
-      - Práctica 4: Practicas/Practica 4.md
+      - Práctica 1: Practicas/Practica1.md
+      - Práctica 2: Practicas/Practica2.md
+      - Práctica 3: Practicas/Practica3.md
+      - Práctica 4: Practicas/Practica4.md
   - Proyectos: Proyectos/
   - Reflexiones: Reflexiones/
 
-# Extensiones para formato avanzado de texto y ecuaciones
+# Extensiones para formato avanzado de texto y ecuaciones matemáticas
 markdown_extensions:
   - admonition
   - pymdownx.details
