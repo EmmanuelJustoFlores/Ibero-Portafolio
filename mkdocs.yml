@@ -5,7 +5,7 @@ site_author: Emmanuel Justo Flores
 theme:
   name: material
   language: es
-  
+
   # Paleta de colores y alternador de modo oscuro / claro
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -28,12 +28,12 @@ theme:
     - navigation.tabs          # Pestañas principales en el menú superior
     - navigation.sections      # Organización por secciones en la barra lateral
     - navigation.top           # Botón flotante para regresar arriba
-    - navigation.path          # Muestra la ruta de navegación actual (breadcrumbs)
+    - navigation.path          # Muestra la ruta de navegación (breadcrumbs)
     - search.suggest           # Sugerencias automáticas en la barra de búsqueda
     - search.highlight         # Resalta palabras encontradas en la búsqueda
-    - content.code.copy        # Agrega botón para copiar los bloques de código
+    - content.code.copy        # Botón para copiar bloques de código
 
-# Extensiones para mejorar el formato de los documentos Markdown
+# Extensiones de Markdown (incluye soporte para fórmulas matemáticas LaTeX)
 markdown_extensions:
   - admonition                 # Bloques visuales de notas, avisos y alertas
   - pymdownx.details           # Cajas desplegables u ocultables
@@ -45,19 +45,15 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.tabbed:           # Pestañas de contenido o código interactivo
       alternate_style: true
+  - pymdownx.arithmatex:       # Habilita el renderizado de ecuaciones matemáticas
+      generic: true
   - tables                     # Tablas formateadas
   - attr_list
 
+# Complementos (solo plugins válidos de Python)
 plugins:
   - search
-  - javascripts/mathjax.js
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
-nav:
-  - Inicio: index.md
-  - "Sobre Mí": SobreMi.md
-  - "Prácticas":
-      - "Practica 1": Practicas/Practica1.md
-  - "Proyectos":
-      - "Proyecto 1": Proyectos/Proyecto1.md
-  - "Reflexiones":
-      - "Vision Mecatronica": Reflexiones/VisionMecatronica.md
+
+# Scripts externos para renderizar matemáticas (LaTeX)
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
