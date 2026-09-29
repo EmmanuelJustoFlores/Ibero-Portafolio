@@ -1,12 +1,12 @@
 site_name: Portafolio de Mecatrónica
-site_description: Documentación de prácticas y proyectos
+site_description: Documentación de prácticas y proyectos - IBERO Puebla
 site_author: Emmanuel Justo Flores
 
 theme:
   name: material
   language: es
 
-  # Paleta de colores y alternador de modo oscuro / claro
+  # Configuración de colores y modo oscuro/claro
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -23,37 +23,44 @@ theme:
         icon: material/brightness-4
         name: Cambiar a modo claro
 
-  # Funcionalidades estéticas y de navegación
+  # Funcionalidades estéticas y menú de navegación
   features:
-    - navigation.tabs          # Pestañas principales en el menú superior
-    - navigation.sections      # Organización por secciones en la barra lateral
-    - navigation.top           # Botón flotante para regresar arriba
-    - navigation.path          # Muestra la ruta de navegación (breadcrumbs)
-    - search.suggest           # Sugerencias automáticas en la barra de búsqueda
-    - search.highlight         # Resalta palabras encontradas en la búsqueda
-    - content.code.copy        # Botón para copiar bloques de código
+    - navigation.tabs          # Pestañas en la barra superior
+    - navigation.sections      # Organización en la barra lateral
+    - navigation.top           # Botón para volver arriba
+    - navigation.path          # Ruta de navegación (breadcrumbs)
+    - search.suggest           # Búsqueda interactiva
+    - search.highlight
+    - content.code.copy        # Botón para copiar código
 
-# Extensiones de Markdown (incluye soporte para fórmulas matemáticas LaTeX)
+# Estratificación del menú vinculada a las carpetas dentro de docs/
+nav:
+  - Inicio: index.md
+  - Sobre Mí: SobreMi.md
+  - Prácticas:
+      - Práctica 4: Practicas/Practica 4.md
+  - Proyectos: Proyectos/
+  - Reflexiones: Reflexiones/
+
+# Extensiones para formato avanzado de texto y ecuaciones
 markdown_extensions:
-  - admonition                 # Bloques visuales de notas, avisos y alertas
-  - pymdownx.details           # Cajas desplegables u ocultables
-  - pymdownx.superfences       # Formato mejorado para bloques de código
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
-  - pymdownx.tabbed:           # Pestañas de contenido o código interactivo
+  - pymdownx.tabbed:
       alternate_style: true
-  - pymdownx.arithmatex:       # Habilita el renderizado de ecuaciones matemáticas
+  - pymdownx.arithmatex:
       generic: true
-  - tables                     # Tablas formateadas
+  - tables
   - attr_list
 
-# Complementos (solo plugins válidos de Python)
 plugins:
   - search
 
-# Scripts externos para renderizar matemáticas (LaTeX)
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
