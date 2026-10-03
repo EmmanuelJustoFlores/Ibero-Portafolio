@@ -33,7 +33,7 @@ theme:
     - search.highlight
     - content.code.copy        # Botón para copiar bloques de código
 
-# Menú de navegación actualizado (nombres de archivos sin espacios)
+# Menú de navegación actualizado con Práctica 5 y Proyectos corregidos
 nav:
   - Inicio: index.md
   - Sobre Mí: SobreMi.md
@@ -42,7 +42,8 @@ nav:
       - Práctica 2: Practicas/Practica2.md
       - Práctica 3: Practicas/Practica3.md
       - Práctica 4: Practicas/Practica4.md
-  - Proyectos: Proyectos/
+      - Práctica 5: Practicas/Practica5.md
+  - Proyectos: Proyectos/index.md
   - Reflexiones: Reflexiones/
 
 # Extensiones para formato avanzado de texto y ecuaciones matemáticas
