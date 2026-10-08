@@ -41,6 +41,12 @@ A continuación se documenta el análisis físico del mecanismo diferencial eval
 | **D. Obturador de láminas** | Movimiento rotatorio de entrada a apertura coordinada. | Sincronizado | Reversible | Diafragma de cámaras fotográficas. |
 
 ---
+## B.
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/201a1516-d918-48f1-a69c-e47638ba3f2a" />
+## C.
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/fb14782b-946f-4974-8f16-5fd8d1b95315" />
+## D.
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/05b88fc1-7661-456c-851e-609aa13fc1b6" />
 
 ## 5. Explicación Teórica
 
