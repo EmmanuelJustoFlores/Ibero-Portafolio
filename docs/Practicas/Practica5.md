@@ -75,8 +75,9 @@ void loop() {
 <img width="1600" height="1200" alt="image" src="https://github.com/user-attachments/assets/f55dc266-0a4d-47b3-8e2a-98fa2fa24323" />
 
 
-https://github.com/user-attachments/assets/1ae8af0f-b539-4387-b29c-b952f8a59888
-
+<video width="100%" controls>
+  <source src="https://github.com/user-attachments/assets/1ae8af0f-b539-4387-b29c-b952f8a59888" type="video/mp4">
+</video>
 
 ## 5. Explicación Teórica
 
