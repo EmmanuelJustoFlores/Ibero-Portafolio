@@ -1,11 +1,11 @@
 # Práctica 5: Comunicación ESP32 por Bluetooth Classic
 
-**Asignatura:** Introducción a la Mecatrónica
-**Autor:** Emmanuel Justo Flores -208048, Romina Velarde Mata -207345
-**Fecha:** 03/10/2026
+**Asignatura:** Introducción a la Mecatrónica  
+**Autor:** Emmanuel Justo Flores -208048, Romina Velarde Mata -207345  
+**Fecha:** 03/10/2026  
 
 ## 1. Objetivo
-Establecer un enlace de comunicación serial inalámbrica mediante Bluetooth Classic utilizando el ESP32 para recibir comandos desde un celular o PC, controlar un LED y visualizar los datos en el Monitor Serial. Adicionalmente, documentar el protocolo de comandos y evaluar la latencia del sistema probando el impacto del uso de la función `delay()`.
+Establecer un enlace de comunicación serial inalámbrica mediante Bluetooth Classic utilizando la placa ESP32 para recibir comandos enviados desde un dispositivo móvil o PC, controlar el estado de un LED de forma inalámbrica y visualizar los datos de depuración en el Monitor Serial. Adicionalmente, documentar el protocolo de comandos, evaluar la latencia del sistema y documentar las fallas presentadas durante el armado y conexión del circuito.
 
 ## 2. Materiales
 
@@ -13,85 +13,89 @@ Establecer un enlace de comunicación serial inalámbrica mediante Bluetooth Cla
 | :---: | :--- | :--- |
 | **1** | ESP32 DevKit V1 | Placa de desarrollo / Microcontrolador principal (clásico, no S3/C3). |
 | **1** | LED | Diodo emisor de luz para indicador visual. |
-| **1** | Resistor 220 Ω | Resistencia limitadora de corriente para el LED. |
-| **1** | Cable USB | Cable de datos para programar el ESP32. |
+| **1** | Resistor $220\ \Omega$ | Resistencia limitadora de corriente para el LED. |
+| **1** | Cable USB | Cable de datos para programar y alimentar el ESP32. |
 | **1** | Celular Android (o PC) | Dispositivo con Bluetooth y la aplicación "Serial Bluetooth Terminal". |
-| **–** | Protoboard y Jumpers | Cables e interconexiones físicas para el armado. |
+| **–** | Protoboard y Jumpers | Cables e interconexiones físicas para el armado del circuito. |
 
 ---
 
 ## 3. Conexiones del Circuito
-* **Ánodo del LED (pata larga):** Conectado al pin **GPIO 23** del ESP32.
-* **Cátodo del LED (pata corta):** Conectado a la resistencia de 220 Ω, y el otro extremo de la resistencia a la masa común (GND).
+* **Ánodo del LED (pata larga):** Conectado al pin **GPIO 5** del ESP32.
+* **Cátodo del LED (pata corta):** Conectado a un extremo de la resistencia de $220\ \Omega$, y el otro extremo de la resistencia conectado a la masa común (**GND**).
 
 ---
 
 ## 4. Código Implementado: Control de LED por Bluetooth
-El siguiente código permite emparejar el ESP32 con el celular y controlar el encendido/apagado del LED enviando texto. Es crucial configurar la app de terminal para que agregue un salto de línea (`Newline = LF`) al final de cada envío.
+
+El código siguiente inicializa el módulo Bluetooth del ESP32 bajo el nombre `ESP32_Emmanuel` y procesa comandos de texto mediante una lectura serial optimizada para evitar bloqueos en el bucle principal (`loop`).
 
 ```cpp
 #include "BluetoothSerial.h"
 
-// Crea el objeto para la comunicación Bluetooth
 BluetoothSerial SerialBT;
-
-// Pin donde está conectado el LED
-#define LED 23
+const int ledPin = 5;
+String mensaje = "";
 
 void setup() {
-  // Inicializa el monitor serial tradicional
   Serial.begin(115200);
   
-  // Nombre con el que aparecerá el dispositivo Bluetooth
-  SerialBT.begin("ESP32");
+  SerialBT.begin("ESP32_Emmanuel");
+  Serial.println("El dispositivo Bluetooth ha iniciado, listo para emparejar.");
   
-  // Timeout corto para que readStringUntil no bloquee el loop
-  SerialBT.setTimeout(20);
-  
-  // Configura el pin del LED como salida
-  pinMode(LED, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
 }
 
 void loop() {
-  // Revisa si hay datos entrantes por Bluetooth
   if (SerialBT.available()) {
-    // Lee hasta el salto de línea (\n)
-    String mensaje = SerialBT.readStringUntil('\n');
+    mensaje = SerialBT.readStringUntil('\n');
     
-    // Quita espacios y retornos de carro (\r). ¡Sin esto la comparación falla!
-    mensaje.trim(); 
+    // Limpia la cadena de texto de saltos de línea y espacios extra
+    mensaje.trim();
     
-    Serial.println("Recibido: " + mensaje);
-    
-    // Compara el mensaje recibido para ejecutar una acción
-    if (mensaje == "ON") {
-      digitalWrite(LED, HIGH);
-    } 
-    else if (mensaje == "OFF") {
-      digitalWrite(LED, LOW);
+    // Muestra el comando en el Monitor Serial para depuración
+    Serial.print("Comando recibido: ");
+    Serial.println(mensaje);
+
+    if (mensaje.indexOf("ON") != -1) {
+      digitalWrite(ledPin, HIGH);
+      SerialBT.println("Accion: LED Encendido");
+    }
+    else if (mensaje.indexOf("OFF") != -1) {
+      digitalWrite(ledPin, LOW);
+      SerialBT.println("Accion: LED Apagado");
     }
   }
-  
-  // Sin delay(): el loop debe girar rápido para responder al instante
 }
 ```
 
 ---
 
-## 5. Protocolo de Comandos
-Para garantizar que el ESP32 y el celular se comuniquen sin ambigüedades, se estableció el siguiente conjunto de comandos de texto, cada uno asociado a una acción clara:
+## 5. Explicación Teórica
 
-| Comando | Acción |
-| :--- | :--- |
-| **ON** | Enciende el LED. |
-| **OFF** | Apaga el LED. |
-| **M,izq,der** | Fija velocidad de cada motor (ej. M,200,200 = adelante recto). |
-| **S** | Alto total - failsafe. |
+### a. Comunicación Bluetooth Classic en ESP32 y Perfil Serial (SPP)
+El ESP32 integra de forma nativa controladores físicos para Bluetooth de modo dual (Bluetooth Classic y BLE). Para esta práctica se utiliza el protocolo **Bluetooth Classic** empleando el perfil de puerto serie virtual (*Serial Port Profile* - SPP). Esto permite que el microcontrolador emule un puerto serial físico por el aire, haciendo posible que un dispositivo maestro (como un teléfono Android o una PC) se empareje y transmita cadenas de caracteres de la misma manera que si estuviera conectado mediante un cable USB.
+
+### b. Recepción No Bloqueante y Saneamiento de Cadenas
+Las comunicaciones inalámbricas suelen introducir caracteres de control no deseados (como retornos de carro `\r` o saltos de línea adicionales `\n`). 
+* El uso de `readStringUntil('\n')` permite capturar tramas de texto completas delimitadas por el usuario.
+* La función `mensaje.trim()` es indispensable para eliminar espacios en blanco y caracteres ocultos antes de realizar las comparaciones lógicas (`indexOf("ON")`), previniendo fallas de ejecución silenciosas.
 
 ---
 
-## 6. Reporte de Fallas, Latencia y Soluciones
-* **Falla de lectura en la comparación de cadenas (`mensaje.trim()`):** Sin utilizar la instrucción `mensaje.trim()`, el texto recibido incluye caracteres invisibles como un retorno de carro (ej. "ON\r"). Esto provoca que la comparación `mensaje == "ON"` falle silenciosamente.
-* **Experimento de Latencia (Uso de `delay`):** Si se coloca un `delay(1000)` dentro del `loop()`, el ESP32 atiende únicamente un comando por segundo. En un carro controlado bajo esta lógica, se presentaría un segundo de retraso, haciéndolo inmanejable. La solución es dejar el loop libre usando `readStringUntil('\n')` acompañado de un `setTimeout` corto.
+## 6. Protocolo de Comandos
+Para asegurar una comunicación clara y sin ambigüedades entre el controlador y el ESP32, se establece un protocolo de comandos basados en texto:
 
-***
+| Comando | Acción asociada |
+| :--- | :--- |
+| **ON** | Enciende el LED indicador conectado al GPIO 5. |
+| **OFF** | Apaga el LED indicador conectado al GPIO 5. |
+
+## 7. Reporte de Fallas y Soluciones
+
+* **Falla 1: Conexión errónea del LED y polaridad invertida**
+  * **Síntoma:** Al enviar el comando "ON" desde la terminal Bluetooth, el Monitor Serial indicaba que la acción se ejecutaba correctamente, pero el LED físico no encendía.
+  * **¿Cómo la encontré?:** Se revisó el circuito físico y se detectó que el pin de salida estaba configurado erróneamente en el código o el diodo LED estaba polarizado de forma inversa (ánodo al cátodo).
+  * **Solución:** Se corrigió la asignación del pin en el código hacia el **GPIO 5** y se verificó la orientación correcta del LED (ánodo al pin de control mediante la resistencia limitadora de $220\ \Omega$ y cátodo a la tierra común).
+
