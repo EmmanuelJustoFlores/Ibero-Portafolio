@@ -24,7 +24,7 @@ A continuación se documenta el análisis físico del mecanismo diferencial eval
 * **Estación analizada:** Diferencial mecánico de engranes cónicos.
 * **Fotografía de la estación:**
 
-<img src="https://github.com/user-attachments/assets/..." alt="Mecanismo Diferencial" style="max-width: 100%; height: auto;">
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/6682e56d-26f5-4188-8ff2-8d2cf4d05720" />
 
 * **Funcionamiento y observación:** El diferencial permite que un solo eje de entrada reparta el giro hacia dos salidas independientes a velocidades distintas. Al realizar una prueba física y detener una de las salidas con el dedo, se observa de inmediato que la otra salida gira al doble de velocidad. 
 * **Aplicación en el proyecto:** Aunque el carro de la materia no utiliza un diferencial mecánico tradicional (sino una *dirección diferencial* controlada por software enviando velocidades distintas a cada motor por separado), este principio es la base fundamental de la tracción automotriz.
