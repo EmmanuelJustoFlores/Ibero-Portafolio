@@ -26,6 +26,10 @@ A continuación se documenta el análisis físico del mecanismo diferencial eval
 
 <img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/6682e56d-26f5-4188-8ff2-8d2cf4d05720" />
 
+
+https://github.com/user-attachments/assets/7d702668-8bf6-4c9c-bc44-4e2a3f7a2784
+
+
 * **Funcionamiento y observación:** El diferencial permite que un solo eje de entrada reparta el giro hacia dos salidas independientes a velocidades distintas. Al realizar una prueba física y detener una de las salidas con el dedo, se observa de inmediato que la otra salida gira al doble de velocidad. 
 * **Aplicación en el proyecto:** Aunque el carro de la materia no utiliza un diferencial mecánico tradicional (sino una *dirección diferencial* controlada por software enviando velocidades distintas a cada motor por separado), este principio es la base fundamental de la tracción automotriz.
 
@@ -44,13 +48,25 @@ A continuación se documenta el análisis físico del mecanismo diferencial eval
 ## B.
 <img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/201a1516-d918-48f1-a69c-e47638ba3f2a" />
 
+
+https://github.com/user-attachments/assets/222d5005-ab96-42c6-ac87-db0f335d84a9
+
+
 ---
 ## C.
 <img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/fb14782b-946f-4974-8f16-5fd8d1b95315" />
 
+
+https://github.com/user-attachments/assets/8a64d43e-f28b-4fe4-a7ae-5a8cad415f58
+
+
 ---
 ## D.
 <img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/05b88fc1-7661-456c-851e-609aa13fc1b6" />
+
+
+https://github.com/user-attachments/assets/a9ecc616-0315-46d8-8795-0b06ef17ce71
+
 
 ---
 ## 5. Explicación Teórica
