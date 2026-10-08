@@ -71,6 +71,8 @@ void loop() {
 ```
 
 ---
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/80f5255e-237c-4500-8867-0403398d44da" />
+<img width="1600" height="1200" alt="image" src="https://github.com/user-attachments/assets/f55dc266-0a4d-47b3-8e2a-98fa2fa24323" />
 
 ## 5. Explicación Teórica
 
