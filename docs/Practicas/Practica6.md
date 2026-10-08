@@ -48,6 +48,7 @@ A continuación se documenta el análisis físico del mecanismo diferencial eval
 ## D.
 <img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/05b88fc1-7661-456c-851e-609aa13fc1b6" />
 
+---
 ## 5. Explicación Teórica
 
 ### a. Relación de Transmisión en Engranes
