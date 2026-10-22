@@ -21,12 +21,6 @@ Para cumplir con las regulaciones de la competencia, el chasis del vehículo no 
 * **Tapa Superior y Marcador ArUco:** Se diseñó una pieza superior (*PI3_Parte arriba*) que actúa como tapa de protección para la electrónica y provee una superficie totalmente plana, horizontal y despejada de al menos $6 \times 6\text{ cm}$. Esta plataforma está destinada a alojar un marcador fiducial ArUco para futuras integraciones de visión por computadora.
 * **Manufactura:** Las piezas fueron segmentadas y preparadas en **Ultimaker Cura** para ser fabricadas mediante impresión 3D (FDM) utilizando filamento PLA. Esto proporcionó un equilibrio óptimo entre ligereza (para mayor aceleración) y resistencia estructural a los impactos durante los partidos.
 
-A continuación se muestran las vistas previas del laminado en Ultimaker Cura:
-
-![Diseño del Chasis en Ultimaker Cura](../recursos/imgs/image_80addd.png)
-
-![Diseño de la Tapa Superior en Ultimaker Cura](../recursos/imgs/image_80ade0.jpg)
-
 ### Archivos de Fabricación 3D (Descargas)
 
 Descarga los modelos originales en formato STL listos para imprimir:
@@ -40,8 +34,6 @@ Descarga los modelos originales en formato STL listos para imprimir:
 
 Para la interfaz de usuario y el envío de comandos hacia el microcontrolador, se utilizó un dispositivo Android corriendo la aplicación **Arduino Bluetooth Control**. 
 
-![Aplicación Arduino Bluetooth Control](../recursos/imgs/image_80ade1.png)
-
 Esta aplicación permite emparejar el teléfono directamente con el módulo Bluetooth Classic del ESP32 y configurar botones en un mando virtual (*gamepad*). Al presionar o soltar los botones, la app envía los caracteres predefinidos en nuestro protocolo hacia el vehículo sin latencia perceptible.
 
 ---
@@ -49,6 +41,31 @@ Esta aplicación permite emparejar el teléfono directamente con el módulo Blue
 ## 4. Arquitectura de Hardware y Asignación de Pines
 
 Para garantizar la máxima estabilidad del sistema y evitar conflictos de arranque (*Wrong boot mode*), se seleccionaron salidas puras libres de restricciones (*strapping pins*) para controlar el **Driver TB6612FNG**.
+
+### 4.1. Diagrama de Conexiones (Esquemático Físico)
+
+```text
+[ Batería LiPo 7.6V ]
+     (+) ────> [ Interruptor ] ────> (VM)  Driver TB6612FNG [Fuerza Motores]
+     (-) ─────────────────┬────────> (GND) Driver TB6612FNG
+                          │
+[ ESP32 DevKit V1 ]       │ (Tierra Común)
+     (GND) <──────────────┘
+     (3.3V) ───────────────────────> (VCC) Driver TB6612FNG [Lógica]
+     (Pin 23) ─────────────────────> (STBY) Activa el driver
+     (Pin 22) ─────────────────────> (PWMA) PWM Motor Izquierdo
+     (Pin 21) ─────────────────────> (AIN1) Dir. Izquierda 1
+     (Pin 19) ─────────────────────> (AIN2) Dir. Izquierda 2
+     (Pin 18) ─────────────────────> (PWMB) PWM Motor Derecho
+     (Pin 27) ─────────────────────> (BIN1) Dir. Derecha 1
+     (Pin 26) ─────────────────────> (BIN2) Dir. Derecha 2
+
+[ Driver TB6612FNG (Salidas de Potencia) ]
+     (AO1, AO2) ───────────────────> [ Motor TT Izquierdo ]
+     (BO1, BO2) ───────────────────> [ Motor TT Derecho ]
+```
+
+### 4.2. Tabla de Asignación
 
 | Pin ESP32 | Pin Driver TB6612 | Función Principal | Justificación Técnica | 
 | :---: | :---: | :--- | :--- | 
@@ -218,3 +235,4 @@ void detener() {
   moverMotor(0, AIN1, AIN2, 0);
   moverMotor(1, BIN1, BIN2, 0);
 }
+```
