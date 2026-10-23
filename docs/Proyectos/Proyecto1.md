@@ -18,7 +18,7 @@ Para cumplir con las regulaciones de la competencia, el chasis del vehículo no 
 
 * **Restricción de Huella:** El diseño se acotó meticulosamente para no superar las dimensiones máximas de $20 \times 20\text{ cm}$, garantizando agilidad y maniobrabilidad en la cancha de fútbol.
 
-* **Modelado del Chasis Principal (Parachoques y Habitáculo):** Se diseñó una base envolvente (*PI3_Chasis*) que protege la integridad del robot. Destaca un frente con cortes angulares a modo de "defensa" o parachoques para soportar colisiones con el balón y otros robots. Internamente, cuenta con soportes para los motores TT y un amplio habitáculo central estructurado específicamente para albergar de forma segura el *Power Bank* y la electrónica (ESP32 y Puente H), evitando cables expuestos.
+* **Modelado del Chasis Principal (Parachoques y Habitáculo):** Se diseñó una base envolvente (*PI3_Chasis*) que protege la integridad del robot. Destaca un frente con cortes angulares a modo de "defensa" o parachoques para soportar colisiones con el balón y otros robots. Internamente, cuenta con un amplio habitáculo central estructurado específicamente para albergar de forma segura el *Power Bank* y la electrónica (ESP32 y Puente H), evitando cables expuestos.
 
 * **Tapa Superior y Personalización:** La pieza superior (*PI3_Parte arriba*) funciona como el techo del vehículo, cerrando el compartimento y protegiendo el hardware. Esta cubierta provee una superficie totalmente plana y horizontal que cumple dos propósitos: alojar la identidad visual del equipo (arte gráfico y el banderín de "Miranda's Team") y garantizar el espacio mínimo despejado de $6 \times 6\text{ cm}$ requerido para la futura colocación de un marcador fiducial ArUco (visión por computadora).
 
