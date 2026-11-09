@@ -5,17 +5,12 @@
 **Fecha:** Noviembre 2026  
 
 ---
-
-## 1. Información General y Fechas Clave
-* **Apertura:** Viernes, 30 de octubre de 2026, 00:00
-* **Cierre:** Lunes, 9 de noviembre de 2026, 00:00
-
-## 2. Objetivo de la Práctica
+## 1. Objetivo de la Práctica
 Comprender y documentar la transición del control en lazo abierto al control en lazo cerrado, aplicando una estrategia de sintonización de un controlador PID (Proporcional, Integral y Derivativo) sobre una plataforma de demostración interactiva. Se evaluarán parámetros críticos de control como el sobreimpulso, el tiempo de establecimiento y el error permanente.
 
 ---
 
-## 3. Desarrollo Experimental
+## 2. Desarrollo Experimental
 
 ### Parte A: Lazo Abierto con el Carro
 En esta sección se evalúa el comportamiento del vehículo sin retroalimentación, ejecutando una secuencia fija de PWM por tiempos (ej. avanzar 2 s, girar 1 s y avanzar 2 s). Se registra la desviación final respecto a la meta bajo diferentes condiciones físicas.
@@ -45,14 +40,11 @@ Utilizando el simulador interactivo, se aplicó la receta de sintonización secu
 
 ---
 
-## 4. Reto / Extra
-
-> [!SUCCESS]
-> **Cumplimiento del Reto Extra:**  
+## 3. Reto / Extra
 > El **Intento 3** documentado en la tabla anterior demuestra que con el juego de ganancias `Kp=2.5, Ki=0.15, Kd=0.8`, se logró superar exitosamente el reto planteado en la plataforma. Se obtuvo un **sobreimpulso del 3.8%** (cumpliendo la condición de ser menor al 5%) y el sistema se estabilizó en apenas **2.8 segundos** (cumpliendo la barrera de ser menor a 5 s).
 
 ---
 
-## 5. Conclusiones y Discusión
+## 4. Conclusiones y Discusión
 * **Lazo Abierto:** Se evidenció que sin retroalimentación, el sistema "ciego" es altamente susceptible a perturbaciones externas (fricción del terreno, caídas de voltaje de la batería, imperfecciones de los motores). Los errores de trayectoria se acumulan progresivamente y el vehículo es incapaz de corregirlos.
 * **Lazo Cerrado (PID):** La inclusión de retroalimentación cambia drásticamente el comportamiento del sistema. El controlador monitorea constantemente la diferencia entre dónde está y dónde debería estar (el error), calculando ajustes en tiempo real. La sinergia de las tres acciones matemáticas (Proporcional para velocidad de respuesta, Derivativa para estabilidad y amortiguamiento, Integral para precisión absoluta) garantiza un posicionamiento exacto y robusto frente a perturbaciones.
